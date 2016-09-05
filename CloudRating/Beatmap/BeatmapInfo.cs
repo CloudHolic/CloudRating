@@ -10,36 +10,42 @@ using CloudRating.Processor;
 namespace CloudRating.Beatmap
 {
     //  Represents a beatmap. It contains all information about a single osu-file.
-    public class BeatmapInfo
+    public struct BeatmapInfo
     {
-        private List<Note> Notes;
-        private List<LongNote> LNs;
+        public Metadata Data { get; }
 
-        public Metadata Data { get; set; }
+        public double MaxDen { get; }
+
+        public double AvgDen { get; }
+
+        public double CorMaxDen { get; }
+
+        public double CorAvgDen { get; }
 
         public BeatmapInfo(string filename)
         {
-            LoadFile(filename);
-        }
+            List<Note> notes;
+            List<LongNote> lns;
 
-        public Tuple<double, double, double, double> GetBeatmapDensities()
-        {
-
-            var orgDen = DensityCalculator.GetDensity(ref Notes, ref LNs);
-            var corDen = DensityCalculator.GetCorrectedDensity(ref Notes, ref LNs, Data.Keys);
-
-            return Tuple.Create(orgDen.Item1, orgDen.Item2, corDen.Item1, corDen.Item2);
-        }
-
-        private void LoadFile(string filename)
-        {
+            //  Load, and parse.
             if (File.Exists(filename))
             {
                 Data = MetadataParser.Parse(filename);
-                HitObjectParser.Parse(filename, out Notes, out LNs, Data.Keys);
+                HitObjectParser.Parse(filename, out notes, out lns, Data.Keys);
             }
             else
                 throw new FileNotFoundException();
+
+            //  Calculate densities.
+            var orgDen = DensityCalculator.GetDensity(ref notes, ref lns);
+            var corDen = DensityCalculator.GetCorrectedDensity(ref notes, ref lns, Data.Keys);
+
+            MaxDen = orgDen.Item1;
+            AvgDen = orgDen.Item2;
+            CorMaxDen = corDen.Item1;
+            CorAvgDen = corDen.Item2;
+
+            //  TODO: Calculate Rating.
         }
     }
 }

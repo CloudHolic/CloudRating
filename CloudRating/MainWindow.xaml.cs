@@ -60,14 +60,13 @@ namespace CloudRating
                 var map = new BeatmapInfo(text);
                 
                 //TODO: Rating algorithm
-                var dens = map.GetBeatmapDensities();
 
                 output = map.Data.Artist + " - " + map.Data.Title + " [" + map.Data.Diff + "]\nMade by " + map.Data.Creator
                     + "\nBPM: " + (map.Data.MaxBpm == map.Data.MinBpm ? Convert.ToString(map.Data.MaxBpm, CultureInfo.CurrentCulture) 
                                     : map.Data.MinBpm + " - " + map.Data.MaxBpm + "\t")
                     + "\tOD: " + map.Data.Od + "\tHP: " + map.Data.Hp + "\tKeys: " + map.Data.Keys
-                    + "\nMax Density: " + dens.Item1 + "\tAverage Density: " + dens.Item2
-                    + "\nCorrected Max Density: " + dens.Item3 + "\tCorrected Average Density: " + dens.Item4
+                    + "\nMax Density: " + map.MaxDen + "\tAverage Density: " + map.AvgDen
+                    + "\nCorrected Max Density: " + map.CorMaxDen + "\tCorrected Average Density: " + map.CorAvgDen
                     + "\nRating: " + "0.0";
             }
             catch (Exception ex)
