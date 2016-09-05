@@ -27,19 +27,19 @@ namespace CloudRating.Parser
 
                     //  Title
                     if (currentLine.StartsWith("TitleUnicode:"))
-                        data.Title = currentLine.Split(':')[1];
+                        data.Title = currentLine.Substring(currentLine.IndexOf(':') + 1);
 
                     //  Artist
                     if (currentLine.StartsWith("ArtistUnicode:"))
-                        data.Artist = currentLine.Split(':')[1];
+                        data.Artist = currentLine.Substring(currentLine.IndexOf(':') + 1);
 
                     //  Creator
                     if (currentLine.StartsWith("Creator:"))
-                        data.Creator = currentLine.Split(':')[1];
+                        data.Creator = currentLine.Substring(currentLine.IndexOf(':') + 1);
 
                     //  Difficulty
                     if (currentLine.StartsWith("Version:"))
-                        data.Diff = currentLine.Split(':')[1];
+                        data.Diff = currentLine.Substring(currentLine.IndexOf(':') + 1);
 
                     //  HP
                     if (currentLine.StartsWith("HPDrainRate:"))
