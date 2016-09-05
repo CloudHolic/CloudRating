@@ -60,6 +60,7 @@
     <Compile Include="Parser\MetadataParser.cs" />
     <Compile Include="Processor\DensityCalculator.cs" />
     <Compile Include="Processor\LineConverter.cs" />
+    <Compile Include="Processor\PatternAnalyzer.cs" />
     <Compile Include="Processor\RatingCalculator.cs" />
     <Compile Include="Structures\LongNote.cs" />
     <Compile Include="Structures\Metadata.cs" />

@@ -59,12 +59,12 @@ namespace CloudRating.Parser
                         string cur;
                         double minBpm = 0, maxBpm = 0;
 
-                        //  Osu stores BPM as 'Miliseconds/Beat'.
                         while ((cur = reader.ReadLine()) != null)
                         {
                             if (cur == "")
                                 break;
 
+                            //  Osu stores BPM as 'Miliseconds/Beat'.
                             var msPerBeat = Convert.ToDouble(cur.Split(',')[1]);
                             if (msPerBeat < 0)
                                 continue;

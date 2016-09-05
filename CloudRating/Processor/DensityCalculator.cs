@@ -52,8 +52,8 @@ namespace CloudRating.Processor
                 maxAverage += denList.OrderByDescending(cur => cur).ToArray()[i];
             maxAverage = Math.Round(maxAverage / maxCount, 2);
 
-            //  Remove the least 25% densities.
-            var minCount = (int)Math.Ceiling((double)denList.Count / 4);
+            //  Remove the least 50% densities.
+            var minCount = (int)Math.Ceiling((double)denList.Count / 2);
             for (var i = 0; i < minCount; i++)
                 denList.Remove(denList.Min());
 
@@ -171,7 +171,8 @@ namespace CloudRating.Processor
                 }
 
                 //  Correct the density.
-                var den = (corNotes.Sum(cur => (double) key/(key - cur.LNs)) + corLNs.Sum(cur => Math.Pow(Base[key], cur.LNs))) / key;
+                //var den = (corNotes.Sum(cur => (double) key/(key - cur.LNs)) + corLNs.Sum(cur => Math.Pow(Base[key], cur.LNs))) / key;
+                var den = (corNotes.Sum(cur => (double)key / (key - cur.LNs)) + corLNs.Sum(cur => (double)key / (key - cur.LNs) * 1.1)) / key;
 
                 density.Add(den);
             }
