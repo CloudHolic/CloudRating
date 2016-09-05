@@ -22,9 +22,13 @@ namespace CloudRating.Beatmap
             LoadFile(filename);
         }
 
-        public Tuple<double, double> GetBeatmapDensities()
+        public Tuple<double, double, double, double> GetBeatmapDensities()
         {
-            return DensityCalculator.GetDensity(ref Notes, ref LNs, Data.Keys);
+
+            var orgDen = DensityCalculator.GetDensity(ref Notes, ref LNs);
+            var corDen = DensityCalculator.GetCorrectedDensity(ref Notes, ref LNs, Data.Keys);
+
+            return Tuple.Create(orgDen.Item1, orgDen.Item2, corDen.Item1, corDen.Item2);
         }
 
         private void LoadFile(string filename)

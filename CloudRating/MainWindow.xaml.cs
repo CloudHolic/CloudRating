@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
@@ -56,14 +57,18 @@ namespace CloudRating
                     text = PathText.Text;
                 }));
 
-                BeatmapInfo map = new BeatmapInfo(text);
+                var map = new BeatmapInfo(text);
                 
                 //TODO: Rating algorithm
-                Tuple<double, double> dens = map.GetBeatmapDensities();
+                var dens = map.GetBeatmapDensities();
 
                 output = map.Data.Artist + " - " + map.Data.Title + " [" + map.Data.Diff + "]\nMade by " + map.Data.Creator
-                    + "\nBPM: " + map.Data.Bpm + "\tOD: " + map.Data.Od + "\tHP: " + map.Data.Hp + "\tKeys: " + map.Data.Keys
-                    + "\nMax Density: " + dens.Item1 + "\tAverage Density: " + dens.Item2 + "\nRating: " + "0.0";
+                    + "\nBPM: " + (map.Data.MaxBpm == map.Data.MinBpm ? Convert.ToString(map.Data.MaxBpm, CultureInfo.CurrentCulture) 
+                                    : map.Data.MinBpm + " - " + map.Data.MaxBpm + "\t")
+                    + "\tOD: " + map.Data.Od + "\tHP: " + map.Data.Hp + "\tKeys: " + map.Data.Keys
+                    + "\nMax Density: " + dens.Item1 + "\tAverage Density: " + dens.Item2
+                    + "\nCorrected Max Density: " + dens.Item3 + "\tCorrected Average Density: " + dens.Item4
+                    + "\nRating: " + "0.0";
             }
             catch (Exception ex)
             {

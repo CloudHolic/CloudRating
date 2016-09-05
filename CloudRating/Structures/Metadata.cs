@@ -2,9 +2,11 @@
 {
     public struct Metadata
     {
-        public Metadata(double bpm, double hp, double od, int key, string title, string artist, string creator, string diff)
+        public Metadata(double maxbpm, double minbpm, double hp, double od, int key,
+            string title, string artist, string creator, string diff)
         {
-            Bpm = bpm;
+            MaxBpm = maxbpm;
+            MinBpm = minbpm;
             Hp = hp;
             Od = od;
             Keys = key;
@@ -15,7 +17,9 @@
             Diff = diff;
         }
 
-        public double Bpm { get; set; }
+        public double MaxBpm { get; set; }
+
+        public double MinBpm { get; set;}
 
         public double Hp { get; set; }
 

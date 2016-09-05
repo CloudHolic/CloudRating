@@ -16,10 +16,6 @@ namespace CloudRating.Parser
             {
                 string currentLine;
 
-                //  This program is valid only at v14.
-                if (reader.ReadLine() != "osu file format v14")
-                    throw new InvalidBeatmapException("It's not a v14 format.");
-
                 while ((currentLine = reader.ReadLine()) != null)
                 {
                     //  Get Mode. If not 3, it's not a mania mode.
@@ -60,12 +56,31 @@ namespace CloudRating.Parser
                     //  BPM
                     if (currentLine.StartsWith("[TimingPoints]"))
                     {
-                        currentLine = reader.ReadLine();
+                        string cur;
+                        double minBpm = 0, maxBpm = 0;
 
                         //  Osu stores BPM as 'Miliseconds/Beat'.
-                        var msPerBeat = Convert.ToDouble(currentLine?.Split(',')[1]);
+                        while ((cur = reader.ReadLine()) != null)
+                        {
+                            if (cur == "")
+                                break;
 
-                        data.Bpm = Math.Round(60000 / msPerBeat, 2);
+                            var msPerBeat = Convert.ToDouble(cur.Split(',')[1]);
+                            if (msPerBeat < 0)
+                                continue;
+
+                            var curBpm = Math.Round(60000/msPerBeat, 2);
+                            if (maxBpm == 0.0 && minBpm == 0.0)
+                                maxBpm = minBpm = curBpm;
+
+                            else if (curBpm >= maxBpm)
+                                maxBpm = curBpm;
+                            else if (curBpm <= minBpm)
+                                minBpm = curBpm;
+                        }
+
+                        data.MaxBpm = maxBpm;
+                        data.MinBpm = minBpm;
 
                         //  The rest part doesn't have any metadata.
                         break;
