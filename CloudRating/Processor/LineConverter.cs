@@ -96,6 +96,7 @@ namespace CloudRating.Processor
                 case 7:
                     switch (coordinate)
                     {
+                        case 35:
                         case 36:
                             result = 0;
                             break;
