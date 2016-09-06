@@ -26,7 +26,7 @@ namespace CloudRating.Processor
 
             //  General correction for density.
             var correction = Math.Pow(10, Math.Log(map.CorMaxDen, map.CorAvgDen) - 1);
-            result -= correction;
+            result -= correction * result / 6;
 
 
             //  Jack correction.
@@ -39,8 +39,8 @@ namespace CloudRating.Processor
             //  Other key modes' rating value is set to 6k like 'key / 6'.
             result *= (double)map.Data.Keys / 6;
 
-            //  Double the score, and round it only for convenience.
-            result = Math.Round(result * 2, 2);
+            //  Multiply, and round it only for convenience.
+            result = Math.Round(result * 1.7, 2);
 
             return result;
         }

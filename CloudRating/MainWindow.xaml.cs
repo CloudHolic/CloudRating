@@ -67,7 +67,9 @@ namespace CloudRating
                                     : map.Data.MinBpm + " - " + map.Data.MaxBpm + "\t")
                     + "\tOD: " + map.Data.Od + "\tHP: " + map.Data.Hp + "\tKeys: " + map.Data.Keys
                     + "\nMax Density: " + map.MaxDen + "\tAverage Density: " + map.AvgDen
+#if DEBUG
                     + "\nCorrected Max Density: " + map.CorMaxDen + "\tCorrected Average Density: " + map.CorAvgDen
+#endif
                     + "\nRating: " + RatingCalculator.CalcRating(map);
             }
             catch (Exception ex)
