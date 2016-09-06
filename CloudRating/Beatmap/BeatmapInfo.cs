@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 using CloudRating.Parser;
@@ -13,6 +12,10 @@ namespace CloudRating.Beatmap
     public struct BeatmapInfo
     {
         public Metadata Data { get; }
+
+        public List<Note> Notes { get; }
+
+        public List<LongNote> LNs { get; }
 
         public double MaxDen { get; }
 
@@ -40,12 +43,14 @@ namespace CloudRating.Beatmap
             var orgDen = DensityCalculator.GetDensity(ref notes, ref lns);
             var corDen = DensityCalculator.GetCorrectedDensity(ref notes, ref lns, Data.Keys);
 
+            //  Copy data.
+            Notes = notes;
+            LNs = lns;
+
             MaxDen = orgDen.Item1;
             AvgDen = orgDen.Item2;
             CorMaxDen = corDen.Item1;
             CorAvgDen = corDen.Item2;
-
-            //  TODO: Calculate Rating.
         }
     }
 }

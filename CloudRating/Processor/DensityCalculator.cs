@@ -108,16 +108,8 @@ namespace CloudRating.Processor
             int startTiming, endTiming;
             var corNotes = new List<NoteCount>();
             var corLNs = new List<LongNoteCount>();
-            var Base = new Dictionary<int, double>();
 
             density = new List<double>();
-
-            //  Add Base info.
-            Base.Add(4, 1.63864);
-            Base.Add(5, 1.53141);
-            Base.Add(6, 1.45851);
-            Base.Add(7, 1.40523);
-            Base.Add(8, 1.36435);
 
             if (notes.Count == 0)
             {
@@ -171,8 +163,8 @@ namespace CloudRating.Processor
                 }
 
                 //  Correct the density.
-                //var den = (corNotes.Sum(cur => (double) key/(key - cur.LNs)) + corLNs.Sum(cur => Math.Pow(Base[key], cur.LNs))) / key;
-                var den = (corNotes.Sum(cur => (double)key / (key - cur.LNs)) + corLNs.Sum(cur => (double)key / (key - cur.LNs) * 1.1)) / key;
+                var den = (corNotes.Sum(cur => (double)key / (key - cur.LNs))
+                            + corLNs.Sum(cur => (double)key / (key - cur.LNs) * 1.1)) / key;
 
                 density.Add(den);
             }

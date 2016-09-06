@@ -6,6 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Threading;
 
 using CloudRating.Beatmap;
+using CloudRating.Processor;
 
 namespace CloudRating
 {
@@ -67,7 +68,7 @@ namespace CloudRating
                     + "\tOD: " + map.Data.Od + "\tHP: " + map.Data.Hp + "\tKeys: " + map.Data.Keys
                     + "\nMax Density: " + map.MaxDen + "\tAverage Density: " + map.AvgDen
                     + "\nCorrected Max Density: " + map.CorMaxDen + "\tCorrected Average Density: " + map.CorAvgDen
-                    + "\nRating: " + "0.0";
+                    + "\nRating: " + RatingCalculator.CalcRating(map);
             }
             catch (Exception ex)
             {
