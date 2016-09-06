@@ -23,23 +23,30 @@ namespace CloudRating.Processor
                 case 4:
                     switch (coordinate)
                     {
+                        case 32:
                         case 36:
                         case 64:
+                        case 96:
                         case 109:
                             result = 0;
                             break;
+                        case 160:
                         case 182:
                         case 192:
                             result = 1;
                             break;
                         case 256:
+                        case 288:
                         case 320:
                         case 329:
+                        case 352:
                             result = 2;
                             break;
                         case 402:
+                        case 416:
                         case 448:
                         case 475:
+                        case 480:
                             result = 3;
                             break;
                         default:
