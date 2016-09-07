@@ -61,7 +61,7 @@ namespace CloudRating.Processor
                 }
             }
 
-            return Math.Round((double)jackCount / Count * 100, 2);
+            return (double)jackCount / Count * 100;
         }
 
         public double GetAntijackRatio()

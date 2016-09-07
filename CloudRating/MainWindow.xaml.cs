@@ -66,11 +66,13 @@ namespace CloudRating
                                     ? Convert.ToString(map.Data.MaxBpm, CultureInfo.CurrentCulture) 
                                     : map.Data.MinBpm + " - " + map.Data.MaxBpm + "\t")
                     + "\tOD: " + map.Data.Od + "\tHP: " + map.Data.Hp + "\tKeys: " + map.Data.Keys
-                    + "\nMax Density: " + map.MaxDen + "\tAverage Density: " + map.AvgDen + "\tJack Raio: " + jack.GetJackRatio() + "%"
+                    + "\nMax Density: " + Math.Round(map.MaxDen, 2) + "\tAverage Density: " + Math.Round(map.AvgDen, 2)
 #if DEBUG
-                    + "\nCorrected Max Density: " + map.CorMaxDen + "\tCorrected Average Density: " + map.CorAvgDen
+                    + "\tJack Raio: " + Math.Round(jack.GetJackRatio(), 2) + "%"
+                    + "\nCorrected Max Density: " + Math.Round(map.CorMaxDen, 2)
+                    + "\tCorrected Average Density: " + Math.Round(map.CorAvgDen, 2)
 #endif
-                    + "\nRating: " + RatingCalculator.CalcRating(map);
+                    + "\nRating: " + Math.Round(RatingCalculator.CalcRating(map), 2);
             }
             catch (Exception ex)
             {

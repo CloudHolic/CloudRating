@@ -41,8 +41,8 @@ namespace CloudRating.Processor
             //  Other key modes' rating value is set to 6k like 'key / 6'.
             result *= (double)map.Data.Keys / 6;
 
-            //  Multiply, and round it only for convenience.
-            result = Math.Round(result * 1.7, 2);
+            //  Multiply it only for convenience.
+            result = result * 1.7;
 
             return result;
         }

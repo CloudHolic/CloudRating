@@ -21,37 +21,16 @@ namespace CloudRating.Processor
             switch (Key)
             {
                 case 4:
-                    switch (coordinate)
-                    {
-                        case 32:
-                        case 36:
-                        case 64:
-                        case 96:
-                        case 109:
-                            result = 0;
-                            break;
-                        case 160:
-                        case 182:
-                        case 192:
-                            result = 1;
-                            break;
-                        case 256:
-                        case 288:
-                        case 320:
-                        case 329:
-                        case 352:
-                            result = 2;
-                            break;
-                        case 402:
-                        case 416:
-                        case 448:
-                        case 475:
-                        case 480:
-                            result = 3;
-                            break;
-                        default:
-                            throw new InvalidBeatmapException("Unknown x-coordinate detected.");
-                    }
+                    if (coordinate <= 109)
+                        result = 0;
+                    else if (coordinate >= 160 && coordinate <= 192)
+                        result = 1;
+                    else if (coordinate >= 256 && coordinate <= 352)
+                        result = 2;
+                    else if (coordinate >= 402 && coordinate <= 480)
+                        result = 3;
+                    else
+                        throw new InvalidBeatmapException("Unknown x-coordinate detected.");
                     break;
                 case 5:
                     if (coordinate < 100)
@@ -94,35 +73,22 @@ namespace CloudRating.Processor
                     }
                     break;
                 case 7:
-                    switch (coordinate)
-                    {
-                        case 35:
-                        case 36:
-                            result = 0;
-                            break;
-                        case 109:
-                            result = 1;
-                            break;
-                        case 182:
-                            result = 2;
-                            break;
-                        case 256:
-                            result = 3;
-                            break;
-                        case 320:
-                        case 329:
-                            result = 4;
-                            break;
-                        case 402:
-                            result = 5;
-                            break;
-                        case 448:
-                        case 475:
-                            result = 6;
-                            break;
-                        default:
-                            throw new InvalidBeatmapException("Unknown x-coordinate detected.");
-                    }
+                    if (coordinate <= 36)
+                        result = 0;
+                    else if (coordinate >= 108 && coordinate <= 109)
+                        result = 1;
+                    else if (coordinate >= 180 && coordinate <= 182)
+                        result = 2;
+                    else if (coordinate >= 252 && coordinate <= 256)
+                        result = 3;
+                    else if (coordinate >= 320 && coordinate <= 329)
+                        result = 4;
+                    else if (coordinate >= 396 && coordinate <= 402)
+                        result = 5;
+                    else if (coordinate >= 448 && coordinate <= 475)
+                        result = 6;
+                    else
+                        throw new InvalidBeatmapException("Unknown x-coordinate detected.");
                     break;
                 case 8:
                     switch (coordinate)

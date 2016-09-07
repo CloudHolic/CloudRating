@@ -30,7 +30,7 @@ namespace CloudRating.Processor
 
             //  Calculate the average density.
             var average = denList.Aggregate(0.0, (current, cur) => current + cur);
-            average = Math.Round(average / denList.Count, 2);
+            average = average / denList.Count;
 
             return Tuple.Create((double)maxDens, average);
         }
@@ -50,7 +50,7 @@ namespace CloudRating.Processor
             double maxAverage = 0;
             for (var i = 0; i < maxCount; i++)
                 maxAverage += denList.OrderByDescending(cur => cur).ToArray()[i];
-            maxAverage = Math.Round(maxAverage / maxCount, 2);
+            maxAverage = maxAverage / maxCount;
 
             //  Remove the least 50% densities.
             var minCount = (int)Math.Ceiling((double)denList.Count / 2);
@@ -59,7 +59,7 @@ namespace CloudRating.Processor
 
             //  Calculate the average density.
             var average = denList.Aggregate(0.0, (current, cur) => current + cur);
-            average = Math.Round(average / denList.Count, 2);
+            average = average / denList.Count;
 
             return Tuple.Create(maxAverage, average);
         }
