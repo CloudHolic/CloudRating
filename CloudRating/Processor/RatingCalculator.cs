@@ -22,7 +22,7 @@ namespace CloudRating.Processor
             else if (map.CorMaxDen >= map.CorAvgDen * 1.5)
                 //  then it means it's quite easy compared with its max density.
                 //  Deduct rating score.
-                result -= map.CorMaxDen * 0.1;
+                result -= map.CorAvgDen * 0.1;
 
             //  General correction for density.
             var correction = Math.Pow(10, Math.Log(map.CorMaxDen, map.CorAvgDen) - 1);
@@ -30,8 +30,10 @@ namespace CloudRating.Processor
 
 
             //  Jack correction.
-            //  Call PatternAnalyzer to find Jacks.
-            var jacks = PatternAnalyzer.FindJacks(map.Notes, map.LNs, map.Data.Keys);
+            //  Call PatternAnalyzer to find Jacks / Antijacks.
+            var analyzer = new PatternAnalyzer(map.Notes, map.LNs, map.Data.Keys);
+            var jacks = analyzer.GetJackRatio();
+            var antijacks = analyzer.GetAntijackRatio();
 
 
             //  Key correction.
