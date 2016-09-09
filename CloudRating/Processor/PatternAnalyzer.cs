@@ -13,9 +13,7 @@ namespace CloudRating.Processor
 
         public List<LongNote>[] LNs { get; }
 
-        public Dictionary<int, List<int>> Times { get; }
-
-        public Dictionary<int, List<Tuple<int, int>>> LN_Times { get; }
+        public Dictionary<int, List<Tuple<int, int>>> Times { get; }
 
         public int Key { get; }
 
@@ -28,8 +26,9 @@ namespace CloudRating.Processor
 
             Notes = new List<Note>[key];
             LNs = new List<LongNote>[key];
-            Times = new Dictionary<int, List<int>>();
-            LN_Times = new Dictionary<int, List<Tuple<int, int>>>();
+            Times = new Dictionary<int, List<Tuple<int, int>>>();
+
+            var tempDic = new Dictionary<int, List<Tuple<int, int>>>();
 
             for (var i = 0; i < key; i++)
             {
@@ -41,18 +40,27 @@ namespace CloudRating.Processor
             {
                 Notes[cur.Line].Add(cur);
 
-                if(!Times.ContainsKey(cur.Time))
-                    Times.Add(cur.Time, new List<int>());
-                Times[cur.Time].Add(cur.Line);
+                if(!tempDic.ContainsKey(cur.Time))
+                    tempDic.Add(cur.Time, new List<Tuple<int, int>>());
+                tempDic[cur.Time].Add(Tuple.Create(cur.Line, 0));
             }
 
             foreach (var cur in lns)
             {
                 LNs[cur.Line].Add(cur);
 
-                if (!LN_Times.ContainsKey(cur.Time))
-                    LN_Times.Add(cur.Time, new List<Tuple<int, int>>());
-                LN_Times[cur.Time].Add(Tuple.Create(cur.Line, cur.Endtime));
+                if (!tempDic.ContainsKey(cur.Time))
+                    tempDic.Add(cur.Time, new List<Tuple<int, int>>());
+                tempDic[cur.Time].Add(Tuple.Create(cur.Line, cur.Endtime));
+            }
+
+            var varList = tempDic.Keys.ToList();
+            varList.Sort();
+            foreach (var cur in varList)
+            {
+                var temp = tempDic[cur];
+                temp.Sort(new TupleComparer());
+                Times.Add(cur, temp);
             }
         }
 

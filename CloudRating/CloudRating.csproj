@@ -62,6 +62,7 @@
     <Compile Include="Processor\LineConverter.cs" />
     <Compile Include="Processor\PatternAnalyzer.cs" />
     <Compile Include="Processor\RatingCalculator.cs" />
+    <Compile Include="Processor\TupleComparer.cs" />
     <Compile Include="Structures\LongNote.cs" />
     <Compile Include="Structures\Metadata.cs" />
     <Compile Include="Structures\Note.cs" />
