@@ -33,7 +33,7 @@ namespace CloudRating.Processor
             //  Call PatternAnalyzer to find Jacks / Antijacks.
             var analyzer = new PatternAnalyzer(map.Notes, map.LNs, map.Data.Keys);
             var jacks = analyzer.GetJackRatio();
-            var antijacks = analyzer.GetAntijackRatio();
+            var antijacks = analyzer.GetSpamRatio();
 
 
             //  Key correction.
