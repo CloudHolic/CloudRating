@@ -25,7 +25,7 @@ namespace CloudRating.Processor
                 result -= map.CorAvgDen * 0.1;
 
             //  General correction for density.
-            var correction = Math.Pow(10, Math.Log(map.CorMaxDen, map.CorAvgDen) - 1);
+            var correction = Math.Pow(10, Math.Log(map.CorMaxDen, map.CorAvgDen) - 1) - 1;
             result -= correction * result / 6;
 
 
@@ -42,7 +42,7 @@ namespace CloudRating.Processor
             result *= (double)map.Data.Keys / 6;
 
             //  Multiply it only for convenience.
-            result = result * 1.7;
+            result = result * 1.4;
 
             return result;
         }
