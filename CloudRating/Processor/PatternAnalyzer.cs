@@ -19,7 +19,7 @@ namespace CloudRating.Processor
 
         public int Count { get; }
 
-        public PatternAnalyzer(List<Note> notes, List<LongNote> lns, int key)
+        public PatternAnalyzer(IReadOnlyCollection<Note> notes, IReadOnlyCollection<LongNote> lns, int key)
         {
             Key = key;
             Count = notes.Count + lns.Count;

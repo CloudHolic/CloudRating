@@ -14,13 +14,10 @@ namespace CloudRating.Processor
             var spams = analyzer.GetSpamRatio();
 
 
-            //  Jack correction.
-
-
             //  Spam correction.
             //  Deduct 'Corrected Max Density' and 'Corrected Average Density' by exponential function.
-            var corMaxDen = map.CorMaxDen - map.CorMaxDen * (Math.Pow(76, spams) - 1) / 100;
-            var corAvgDen = map.CorAvgDen - map.CorAvgDen * (Math.Pow(76, spams) - 1) / 100;
+            var corMaxDen = map.CorMaxDen - map.CorMaxDen * (Math.Pow(78, spams) - 1) / 100;
+            var corAvgDen = map.CorAvgDen - map.CorAvgDen * (Math.Pow(78, spams) - 1) / 100;
 
 
             //  Start from 'Corrected Max Density'
@@ -45,13 +42,19 @@ namespace CloudRating.Processor
             result -= result * correction / 10;
 
 
+            //  Jack correction.
+            //  Increase Rating bye exponential function.
+            result += result * (Math.Pow(101, jacks) - 1) / 100;
+
+
             //  Key correction.
             //  Standard: 6k.
             //  Other key modes' rating value is set to 6k like 'key / 6'.
             result *= (double)map.Data.Keys / 6;
 
+
             //  Multiply it only for convenience.
-            result = result * 1.2;
+            result = result * 1.3;
 
             return result;
         }
