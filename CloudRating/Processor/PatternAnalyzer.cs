@@ -172,12 +172,60 @@ namespace CloudRating.Processor
                 }
             }
 
-            return (double)jackCount / Count * 100;
+            return (double)jackCount / Count;
         }
 
         public double GetSpamRatio()
         {
-            return 0;
+            var spamCount = 0;
+            var sectionLines = new List<int>();
+            var sectionList = new List<int>();
+
+            foreach (var cur in Times)
+            {
+                //  Find a new spam section.
+                if (sectionLines.Count == 0 && sectionList.Count == 0)
+                {
+                    if (cur.Value.Count < 3)
+                        continue;
+
+                    sectionLines.AddRange(cur.Value.Select(x => x.Item1));
+                    sectionList.Add(cur.Key);
+                }
+                else
+                {
+                    var temp = new List<int>();
+                    temp.AddRange(cur.Value.Select(x => x.Item1));
+
+                    var LNEnd = cur.Value.Aggregate(true, (current, t) => current && (cur.Value[0].Item2 == t.Item2));
+
+                    var Lines = temp.Count == sectionLines.Count;
+                    for (var i = 0 ; i < temp.Count ; i++)
+                        Lines = Lines && (temp[i] == sectionLines[i]);
+
+                    if (LNEnd && Lines)
+                        sectionList.Add(cur.Key);
+                    else
+                    {
+                        if (sectionList.Count >= 3)
+                            spamCount += sectionLines.Count * sectionList.Count;
+
+                        sectionLines.Clear();
+                        sectionList.Clear();
+
+                        if (cur.Value.Count < 3)
+                            continue;
+
+                        sectionLines.AddRange(cur.Value.Select(x => x.Item1));
+                        sectionList.Add(cur.Key);
+                    }
+                }
+            }
+
+            if(sectionList.Count >= 3)
+                spamCount += sectionLines.Count * sectionList.Count;
+
+            return (double)spamCount / Count;
         }
     }
 }

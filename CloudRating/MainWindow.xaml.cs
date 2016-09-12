@@ -68,7 +68,8 @@ namespace CloudRating
                     + "\tOD: " + map.Data.Od + "\tHP: " + map.Data.Hp + "\tKeys: " + map.Data.Keys
                     + "\nMax Density: " + Math.Round(map.MaxDen, 2) + "\tAverage Density: " + Math.Round(map.AvgDen, 2)
 #if DEBUG
-                    + "\tJack Ratio: " + Math.Round(jack.GetJackRatio(), 2) + "%"
+                    + "\tJack Ratio: " + Math.Round(jack.GetJackRatio() * 100, 2) + "%"
+                    + "\nSpam Ratio: " + Math.Round(jack.GetSpamRatio() * 100, 2) + "%"
                     + "\nCorrected Max Density: " + Math.Round(map.CorMaxDen, 2)
                     + "\tCorrected Average Density: " + Math.Round(map.CorAvgDen, 2)
 #endif
