@@ -25,7 +25,7 @@ namespace CloudRating.Processor
                         result = 0;
                     else if (coordinate >= 160 && coordinate <= 192)
                         result = 1;
-                    else if (coordinate >= 256 && coordinate <= 352)
+                    else if (coordinate >= 256 && coordinate <= 358)
                         result = 2;
                     else if (coordinate >= 402 && coordinate <= 480)
                         result = 3;
