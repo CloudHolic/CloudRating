@@ -19,10 +19,13 @@ namespace CloudRating.Processor
 
         public int Count { get; }
 
-        public PatternAnalyzer(List<Note> notes, List<LongNote> lns, int key)
+        public bool SpecialStyle { get; }
+
+        public PatternAnalyzer(List<Note> notes, List<LongNote> lns, int key, bool specialstyle)
         {
             Key = key;
             Count = notes.Count + lns.Count;
+            SpecialStyle = specialstyle;
 
             Notes = new List<Note>[key];
             LNs = new List<LongNote>[key];
@@ -81,6 +84,9 @@ namespace CloudRating.Processor
                     var gap1 = Notes[i][j + 1].Time - Notes[i][j].Time;
                     var gap2 = Notes[i][j + 2].Time - Notes[i][j + 1].Time;
 
+                    if (SpecialStyle && i== 0 && (gap1 > 84 || gap2 > 84))
+                        continue;
+
                     if (gap1 > 107 || gap2 > 107)
                         continue;
 
@@ -90,7 +96,8 @@ namespace CloudRating.Processor
                     sectionList.Add(Notes[i][j + 2].Time);
                     for (var k = j + 2; k < Notes[i].Count - 1; k++)
                     {
-                        if (Notes[i][k + 1].Time - Notes[i][k].Time > 107)
+                        var gap = Notes[i][k + 1].Time - Notes[i][k].Time;
+                        if ((SpecialStyle && gap > 84) || (!SpecialStyle && gap > 107))
                         {
                             j = k;
                             break;
@@ -101,47 +108,50 @@ namespace CloudRating.Processor
 
                     //  Check if there're any other notes except jack
                     var onlyJack = true;
-                    for (var k = 0; k < Notes.Length; k++)
+                    if (!(SpecialStyle && i == 0))
                     {
-                        if (k == i)
-                            continue;
-
-                        for (var l = 0; l < Notes[k].Count; l++)
+                        for (var k = 0; k < Notes.Length; k++)
                         {
-                            if (Notes[k][l].Time < sectionList[0])
+                            if (k == i)
                                 continue;
 
-                            if (Notes[k][l].Time > sectionList[0])
+                            for (var l = 0; l < Notes[k].Count; l++)
                             {
-                                onlyJack = onlyJack && Notes[k][l].Time > sectionList[sectionList.Count - 1];
-                                break;
-                            }
-
-                            var temp = true;
-                            for (var m = 1; m < sectionList.Count; m++)
-                            {
-                                if ((l + m < Notes[k].Count) && (Notes[k][l + m].Time == sectionList[m]))
+                                if (Notes[k][l].Time < sectionList[0])
                                     continue;
 
-                                temp = false;
+                                if (Notes[k][l].Time > sectionList[0])
+                                {
+                                    onlyJack = onlyJack && Notes[k][l].Time > sectionList[sectionList.Count - 1];
+                                    break;
+                                }
+
+                                var temp = true;
+                                for (var m = 1; m < sectionList.Count; m++)
+                                {
+                                    if ((l + m < Notes[k].Count) && (Notes[k][l + m].Time == sectionList[m]))
+                                        continue;
+
+                                    temp = false;
+                                    break;
+                                }
+
+                                onlyJack = onlyJack && temp;
                                 break;
                             }
 
-                            onlyJack = onlyJack && temp;
-                            break;
-                        }
-
-                        for (var l = 0; l < LNs[k].Count; l++)
-                        {
-                            if (LNs[k][l].Endtime <= sectionList[0])
-                                continue;
-                            onlyJack = onlyJack && LNs[k][l].Time > sectionList[sectionList.Count - 1];
-                            break;
+                            for (var l = 0; l < LNs[k].Count; l++)
+                            {
+                                if (LNs[k][l].Endtime <= sectionList[0])
+                                    continue;
+                                onlyJack = onlyJack && LNs[k][l].Time > sectionList[sectionList.Count - 1];
+                                break;
+                            }
                         }
                     }
 
                     //  If onlyJack, then 107ms => 94ms.
-                    if (onlyJack)
+                    if (!(SpecialStyle && i == 0) && onlyJack)
                     {
                         for (var k = 0; k < sectionList.Count - 2; k++)
                         {

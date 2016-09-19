@@ -9,7 +9,7 @@ namespace CloudRating.Processor
         public static double CalcRating(BeatmapInfo map)
         {
             //  Call PatternAnalyzer to find Jacks / Spams.
-            var analyzer = new PatternAnalyzer(map.Notes, map.LNs, map.Data.Keys);
+            var analyzer = new PatternAnalyzer(map.Notes, map.LNs, map.Data.Keys, map.Data.SpecialStyle);
             var jacks = analyzer.GetJackRatio();
             var spams = analyzer.GetSpamRatio();
 
@@ -38,23 +38,25 @@ namespace CloudRating.Processor
                 result -= corMaxDen * 0.1;
 
             //  General correction for density.
-            var correction = Math.Pow(10, Math.Log(corMaxDen, corAvgDen) - 1) - 1;
+            var correction = Math.Pow(6, Math.Log(corMaxDen, corAvgDen + corMaxDen)) - 1;
             result -= result * correction / 10;
 
 
             //  Jack correction.
-            //  Increase Rating bye exponential function.
+            //  Increase Rating by exponential function.
             result += result * (Math.Pow(101, jacks) - 1) / 100;
 
 
             //  Key correction.
             //  Standard: 6k.
-            //  Other key modes' rating value is set to 6k like 'key / 6'.
-            result *= (double)map.Data.Keys / 6;
+            //  Other key modes' rating value is set to 6k like '(key + 1) / 7'.
+            //  If it's special style, than key - 1.
+            var specialStyle = map.Data.Keys == 8 && (double)(analyzer.Notes[0].Count + analyzer.LNs[0].Count) / analyzer.Count < 0.06;
+            result *= (double)((specialStyle ? map.Data.Keys - 1 : map.Data.Keys) + 1) / 7;
 
 
             //  Multiply it only for convenience.
-            result = result * 1.3;
+            result = result * 1.6;
 
             return result;
         }

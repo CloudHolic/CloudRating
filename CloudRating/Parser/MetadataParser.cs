@@ -25,6 +25,10 @@ namespace CloudRating.Parser
                             throw new InvalidModeException("It's not a Mania beatmap.");
                     }
 
+                    //  Special Style.
+                    if (currentLine.StartsWith("SpecialStyle:"))
+                        data.SpecialStyle = Convert.ToInt32(currentLine.Split(' ')[1]) == 1;
+
                     //  Title
                     if (currentLine.StartsWith("TitleUnicode:"))
                         data.Title = currentLine.Substring(currentLine.IndexOf(':') + 1);
