@@ -50,7 +50,7 @@ namespace CloudRating.Processor
             //  Key correction.
             //  Standard: 6k.
             //  Other key modes' rating value is set to 6k like '(key + 1) / 7'.
-            //  If it's special style, than key - 1.
+            //  If it's special style, than key -= 1.
             var specialStyle = map.Data.Keys == 8 && (double)(analyzer.Notes[0].Count + analyzer.LNs[0].Count) / analyzer.Count < 0.06;
             result *= (double)((specialStyle ? map.Data.Keys - 1 : map.Data.Keys) + 1) / 7;
 
