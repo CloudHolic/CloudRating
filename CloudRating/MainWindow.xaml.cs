@@ -90,5 +90,15 @@ namespace CloudRating
 
             isCalculating = false;
         }
+
+        private void Window_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+                return;
+
+            var files = (string[]) e.Data.GetData(System.Windows.DataFormats.FileDrop);
+
+            PathText.Text = files?[0];
+        }
     }
 }

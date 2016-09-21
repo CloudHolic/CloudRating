@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-
+using CloudRating.CustomExceptions;
 using CloudRating.Parser;
 using CloudRating.Structures;
 using CloudRating.Processor;
@@ -33,6 +33,9 @@ namespace CloudRating.Beatmap
             //  Load, and parse.
             if (File.Exists(filename))
             {
+                if(filename.Split('.')[filename.Split('.').Length - 1] != "osu")
+                    throw new InvalidBeatmapException("Unknown file format.");
+
                 Data = MetadataParser.Parse(filename);
                 HitObjectParser.Parse(filename, out notes, out lns, Data.Keys);
             }
