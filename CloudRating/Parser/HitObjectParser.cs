@@ -48,7 +48,7 @@ namespace CloudRating.Parser
                     }
 
                     //  x, y, time, 128, hitsound, endtime:addition for long note.
-                    else if (Convert.ToInt32(splitLine[3]) == 128)
+                    else if (Convert.ToInt32(splitLine[3]) == 128 || (Convert.ToInt32(splitLine[3]) == 132))
                     {
                         var temp = new LongNote
                         {

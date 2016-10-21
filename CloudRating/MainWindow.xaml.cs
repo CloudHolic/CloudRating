@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Threading;
+using System.Diagnostics;
 
 using CloudRating.Beatmap;
 using CloudRating.Processor;
@@ -38,7 +39,7 @@ namespace CloudRating
         {
             var ofd = new OpenFileDialog
             {
-                Filter = ".osu files (*.osu)|*.osu",
+                Filter = @".osu files (*.osu)|*.osu",
                 RestoreDirectory = true
             };
 
@@ -63,6 +64,9 @@ namespace CloudRating
 
             try
             {
+                var sw = new Stopwatch();
+                sw.Start();
+
                 Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
                 {
                     text = PathText.Text;
@@ -87,6 +91,11 @@ namespace CloudRating
                     + "\tCorrected Average Density: " + Math.Round(map.CorAvgDen, 2)
 #endif
                     + "\nRating: " + Math.Round(RatingCalculator.CalcRating(map), 2);
+
+                sw.Stop();
+#if DEBUG
+                output += "\nElapsed Time: " + sw.ElapsedMilliseconds;
+#endif
             }
             catch (Exception ex)
             {
