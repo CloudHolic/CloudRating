@@ -30,7 +30,6 @@ using System.Windows;
 
 //[assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)]
 
-
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //테마별 리소스 사전의 위치
                                      //(페이지, 앱 또는 모든 테마별 리소스 사전에 
@@ -39,7 +38,6 @@ using System.Windows;
                                               //(페이지, 앱 또는 모든 테마별 리소스 사전에 
                                               // 리소스가 없는 경우에 사용됨)
 )]
-
 
 // 어셈블리의 버전 정보는 다음 네 가지 값으로 구성됩니다.
 //

@@ -13,18 +13,15 @@ namespace CloudRating.Processor
             var analyzer = new PatternAnalyzer(map.Notes, map.LNs, map.Data.Keys, map.Data.SpecialStyle);
             var jacks = analyzer.GetJackRatio();
             var spams = analyzer.GetSpamRatio();
-
-
+            
             //  Spam correction.
             //  Deduct 'Corrected Max Density' and 'Corrected Average Density' by exponential function.
-            var corMaxDen = map.CorMaxDen - map.CorMaxDen * (Math.Pow(78, spams) - 1) / 100;
-            var corAvgDen = map.CorAvgDen - map.CorAvgDen * (Math.Pow(78, spams) - 1) / 100;
-
-
+            var corMaxDen = map.CorMaxDen - ((map.CorMaxDen * (Math.Pow(78, spams) - 1)) / 100);
+            var corAvgDen = map.CorAvgDen - ((map.CorAvgDen * (Math.Pow(78, spams) - 1)) / 100);
+            
             //  Start from 'Corrected Max Density'
             var result = corMaxDen;
             
-
             //  Density correction.
             //  If 'Corrected Average Density' is really close with 'Corrected Max Density',
             if (corMaxDen <= corAvgDen * 1.1)
@@ -41,20 +38,17 @@ namespace CloudRating.Processor
             //  General correction for density.
             var correction = Math.Pow(6, Math.Log(corMaxDen, corAvgDen + corMaxDen)) - 1;
             result -= result * correction / 10;
-
-
+            
             //  Jack correction.
             //  Increase Rating by exponential function.
             result += result * (Math.Pow(101, jacks) - 1) / 100;
-
-
+            
             //  Key correction.
             //  Standard: 6k.
             //  Other key modes' rating value is set to 6k like '(key + 1) / 7'.
             //  If it's special style, than key -= 1.
             var specialStyle = map.Data.Keys == 8 && (double)(analyzer.Notes[0].Count + analyzer.LNs[0].Count) / analyzer.Count < 0.06;
             result *= (double)((specialStyle ? map.Data.Keys - 1 : map.Data.Keys) + 1) / 7;
-
 
             //  Multiply it only for convenience.
             result = result * 1.6;

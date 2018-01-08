@@ -86,8 +86,8 @@ namespace CloudRating.Processor
                 endTiming = Math.Max(notes[notes.Count - 1].Time, lns[lns.Count - 1].Time);
             }
 
-            var startPeriod = startTiming - startTiming % 250;
-            var endPeriod = endTiming + (250 - endTiming % 250);
+            var startPeriod = startTiming - (startTiming % 250);
+            var endPeriod = endTiming + (250 - (endTiming % 250));
 
             for (var i = startPeriod; i < endPeriod - 1000; i += 250)
             {
@@ -146,8 +146,8 @@ namespace CloudRating.Processor
                 endTiming = Math.Max(Notes[Notes.Count - 1].Time, LNs[LNs.Count - 1].Time);
             }
 
-            var startPeriod = startTiming - startTiming % 250;
-            var endPeriod = endTiming + (250 - endTiming % 250);
+            var startPeriod = startTiming - (startTiming % 250);
+            var endPeriod = endTiming + (250 - (endTiming % 250));
 
             for (var i = startPeriod; i < endPeriod - 1000; i += 250)
             {
@@ -155,13 +155,15 @@ namespace CloudRating.Processor
                 corLNs.Clear();
 
                 //  Get the notes in current period.
-                corNotes.AddRange(from cur in Notes where cur.Time >= i && cur.Time <= i + 1000
-                                  select new NoteCount(cur.Time, cur.Line, 0));
+                corNotes.AddRange(
+                    from cur in Notes where cur.Time >= i && cur.Time <= i + 1000
+                    select new NoteCount(cur.Time, cur.Line, 0));
 
-                corLNs.AddRange(from cur in LNs where (cur.Time >= i && cur.Time <= i + 1000)
-                                                        || (cur.Endtime >= i && cur.Endtime <= i + 1000)
-                                                        || (cur.Time <= i && cur.Endtime >= i + 1000)
-                                select new LongNoteCount(cur.Time, cur.Endtime, cur.Line, 0));
+                corLNs.AddRange(
+                    from cur in LNs where (cur.Time >= i && cur.Time <= i + 1000)
+                    || (cur.Endtime >= i && cur.Endtime <= i + 1000)
+                    || (cur.Time <= i && cur.Endtime >= i + 1000)
+                    select new LongNoteCount(cur.Time, cur.Endtime, cur.Line, 0));
 
                 //  Count the LN-count for each notes.
                 foreach (var cur in corLNs)

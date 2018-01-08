@@ -76,7 +76,6 @@ namespace CloudRating.Parser
                             var curBpm = Math.Round(60000/msPerBeat, 2);
                             if (Math.Abs(maxBpm) < 0.001 && Math.Abs(minBpm) < 0.001)
                                 maxBpm = minBpm = curBpm;
-
                             else if (curBpm >= maxBpm)
                                 maxBpm = curBpm;
                             else if (curBpm <= minBpm)

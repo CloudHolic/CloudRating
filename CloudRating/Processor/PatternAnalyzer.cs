@@ -73,7 +73,7 @@ namespace CloudRating.Processor
             var sectionList = new List<int>();
 
             //  Jack: 3 or more notes which is in same line with gap <= 107ms.
-            for (var i = 0 ; i < Notes.Length ; i++)
+            for (var i = 0; i < Notes.Length; i++)
             {
                 for (var j = 0; j < Notes[i].Count - 2; j++)
                 {
@@ -210,7 +210,7 @@ namespace CloudRating.Processor
                     var LNEnd = cur.Value.Aggregate(true, (current, t) => current && (cur.Value[0].Item2 == t.Item2));
 
                     var Lines = temp.Count == sectionLines.Count;
-                    for (var i = 0 ; i < temp.Count ; i++)
+                    for (var i = 0; i < temp.Count; i++)
                         Lines = Lines && (temp[i] == sectionLines[i]);
 
                     if (LNEnd && Lines)

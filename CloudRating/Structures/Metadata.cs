@@ -20,7 +20,7 @@
 
         public double MaxBpm { get; set; }
 
-        public double MinBpm { get; set;}
+        public double MinBpm { get; set; }
 
         public double Hp { get; set; }
 
