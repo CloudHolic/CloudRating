@@ -65,10 +65,9 @@ namespace CloudRating.Processor
             return Tuple.Create(maxAverage, average);
         }
 
-        private static void CalcDensityList(ref List<Note> notes, ref List<LongNote> lns, out List<int> density)
+        private static Tuple<int, int> GetPeriods(ref List<Note> notes, ref List<LongNote> lns)
         {
             int startTiming, endTiming;
-            density = new List<int>();
 
             if (notes.Count == 0)
             {
@@ -89,6 +88,17 @@ namespace CloudRating.Processor
             var startPeriod = startTiming - (startTiming % 250);
             var endPeriod = endTiming + (250 - (endTiming % 250));
 
+            return Tuple.Create(startPeriod, endPeriod);
+        }
+
+        private static void CalcDensityList(ref List<Note> notes, ref List<LongNote> lns, out List<int> density)
+        {
+            density = new List<int>();
+
+            var periods = GetPeriods(ref notes, ref lns);
+            var startPeriod = periods.Item1;
+            var endPeriod = periods.Item2;
+
             for (var i = startPeriod; i < endPeriod - 1000; i += 250)
             {
                 var counts = 0;
@@ -106,7 +116,7 @@ namespace CloudRating.Processor
 
         private static void CalcCorrectedDensities(ref List<Note> notes, ref List<LongNote> lns, int key, out List<double> density)
         {
-            int startTiming, endTiming, Key;
+            int Key;
             var pat = new PatternAnalyzer(notes, lns, key, false);
 
             var corNotes = new List<NoteCount>();
@@ -130,24 +140,9 @@ namespace CloudRating.Processor
                 Key = key - 1;
             }
 
-            if (Notes.Count == 0)
-            {
-                startTiming = LNs[0].Time;
-                endTiming = LNs[LNs.Count - 1].Time;
-            }
-            else if (LNs.Count == 0)
-            {
-                startTiming = Notes[0].Time;
-                endTiming = Notes[Notes.Count - 1].Time;
-            }
-            else
-            {
-                startTiming = Math.Min(Notes[0].Time, LNs[0].Time);
-                endTiming = Math.Max(Notes[Notes.Count - 1].Time, LNs[LNs.Count - 1].Time);
-            }
-
-            var startPeriod = startTiming - (startTiming % 250);
-            var endPeriod = endTiming + (250 - (endTiming % 250));
+            var periods = GetPeriods(ref notes, ref lns);
+            var startPeriod = periods.Item1;
+            var endPeriod = periods.Item2;
 
             for (var i = startPeriod; i < endPeriod - 1000; i += 250)
             {
@@ -155,9 +150,7 @@ namespace CloudRating.Processor
                 corLNs.Clear();
 
                 //  Get the notes in current period.
-                corNotes.AddRange(
-                    from cur in Notes where cur.Time >= i && cur.Time <= i + 1000
-                    select new NoteCount(cur.Time, cur.Line, 0));
+                corNotes.AddRange(from cur in Notes where cur.Time >= i && cur.Time <= i + 1000 select new NoteCount(cur.Time, cur.Line, 0));
 
                 corLNs.AddRange(
                     from cur in LNs where (cur.Time >= i && cur.Time <= i + 1000)
