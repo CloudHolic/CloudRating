@@ -106,7 +106,7 @@ namespace CloudRating.Processor
                         sectionList.Add(Notes[i][k + 1].Time);
                     }
 
-                    //  Check if there're any other notes except jack
+                    //  Check if there are any other notes except jack
                     var onlyJack = true;
                     if (!(SpecialStyle && i == 0))
                     {

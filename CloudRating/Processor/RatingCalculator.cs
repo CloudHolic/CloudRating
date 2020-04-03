@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Windows;
 using CloudRating.Beatmap;
 
 namespace CloudRating.Processor
@@ -51,7 +49,7 @@ namespace CloudRating.Processor
             result *= (double)((specialStyle ? map.Data.Keys - 1 : map.Data.Keys) + 1) / 7;
 
             //  Multiply it only for convenience.
-            result = result * 1.6;
+            result *= 1.6;
 
             return result;
         }
