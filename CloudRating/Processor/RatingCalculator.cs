@@ -14,8 +14,8 @@ namespace CloudRating.Processor
             
             //  Spam correction.
             //  Deduct 'Corrected Max Density' and 'Corrected Average Density' by exponential function.
-            var corMaxDen = map.CorMaxDen - ((map.CorMaxDen * (Math.Pow(78, spams) - 1)) / 100);
-            var corAvgDen = map.CorAvgDen - ((map.CorAvgDen * (Math.Pow(78, spams) - 1)) / 100);
+            var corMaxDen = map.CorMaxDen * (1 - (Math.Pow(78, spams) - 1) / 100);
+            var corAvgDen = map.CorAvgDen * (1 - (Math.Pow(78, spams) - 1) / 100);
             
             //  Start from 'Corrected Max Density'
             var result = corMaxDen;
@@ -35,11 +35,11 @@ namespace CloudRating.Processor
 
             //  General correction for density.
             var correction = Math.Pow(6, Math.Log(corMaxDen, corAvgDen + corMaxDen)) - 1;
-            result -= result * correction / 10;
+            result *= 1 - correction / 10;
             
             //  Jack correction.
             //  Increase Rating by exponential function.
-            result += result * (Math.Pow(101, jacks) - 1) / 100;
+            result *= 1 + (Math.Pow(101, jacks) - 1) / 100;
             
             //  Key correction.
             //  Standard: 6k.

@@ -12,10 +12,8 @@ namespace CloudRating.Processor
         //  Returns a tuple of (Max Density, Average Density)
         public static Tuple<double, double> GetDensity(ref List<Note> notes, ref List<LongNote> lns)
         {
-            List<int> denList;
-
             //  Get the list of densities.
-            CalcDensityList(ref notes, ref lns, out denList);
+            CalcDensityList(ref notes, ref lns, out var denList);
 
             //  Check if the density list is empty.
             if(denList.Count == 0)
@@ -31,7 +29,7 @@ namespace CloudRating.Processor
 
             //  Calculate the average density.
             var average = denList.Aggregate(0.0, (current, cur) => current + cur);
-            average = average / denList.Count;
+            average /= denList.Count;
 
             return Tuple.Create((double)maxDens, average);
         }
@@ -39,8 +37,7 @@ namespace CloudRating.Processor
         //  Returns a tuple of (Corrected Max Density, Corrected Average Density)
         public static Tuple<double, double> GetCorrectedDensity(ref List<Note> notes, ref List<LongNote> lns, int key)
         {
-            List<double> denList;
-            CalcCorrectedDensities(ref notes, ref lns, key, out denList);
+            CalcCorrectedDensityList(ref notes, ref lns, key, out var denList);
 
             //  Check if the density list is empty.
             if(denList.Count == 0)
@@ -51,7 +48,7 @@ namespace CloudRating.Processor
             double maxAverage = 0;
             for (var i = 0; i < maxCount; i++)
                 maxAverage += denList.OrderByDescending(cur => cur).ToArray()[i];
-            maxAverage = maxAverage / maxCount;
+            maxAverage /= maxCount;
 
             //  Remove the least 50% densities.
             var minCount = (int)Math.Ceiling((double)denList.Count / 2);
@@ -60,7 +57,7 @@ namespace CloudRating.Processor
 
             //  Calculate the average density.
             var average = denList.Aggregate(0.0, (current, cur) => current + cur);
-            average = average / denList.Count;
+            average /= denList.Count;
 
             return Tuple.Create(maxAverage, average);
         }
@@ -95,10 +92,7 @@ namespace CloudRating.Processor
         {
             density = new List<int>();
 
-            var periods = GetPeriods(ref notes, ref lns);
-            var startPeriod = periods.Item1;
-            var endPeriod = periods.Item2;
-
+            var (startPeriod, endPeriod) = GetPeriods(ref notes, ref lns);
             for (var i = startPeriod; i < endPeriod - 1000; i += 250)
             {
                 var counts = 0;
@@ -114,7 +108,7 @@ namespace CloudRating.Processor
             }
         }
 
-        private static void CalcCorrectedDensities(ref List<Note> notes, ref List<LongNote> lns, int key, out List<double> density)
+        private static void CalcCorrectedDensityList(ref List<Note> notes, ref List<LongNote> lns, int key, out List<double> density)
         {
             int Key;
             var pat = new PatternAnalyzer(notes, lns, key, false);
@@ -140,10 +134,7 @@ namespace CloudRating.Processor
                 Key = key - 1;
             }
 
-            var periods = GetPeriods(ref notes, ref lns);
-            var startPeriod = periods.Item1;
-            var endPeriod = periods.Item2;
-
+            var (startPeriod, endPeriod) = GetPeriods(ref notes, ref lns);
             for (var i = startPeriod; i < endPeriod - 1000; i += 250)
             {
                 corNotes.Clear();
